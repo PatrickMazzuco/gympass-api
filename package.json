@@ -1,0 +1,25 @@
+{
+  "name": "gympass-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsup",
+    "start": "node dist/server.js",
+    "start:dev": "tsx watch src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "18.15.11",
+    "eslint": "8.38.0",
+    "tsconfig-paths": "4.2.0",
+    "tsup": "6.7.0",
+    "tsx": "3.12.6",
+    "typescript": "5.0.4"
+  },
+  "dependencies": {
+    "fastify": "4.15.0"
+  }
+}
