@@ -1,15 +1,14 @@
-import { app } from "./app";
+import { app } from './app';
 
 const port = 3000;
-const host = "0.0.0.0";
-
+const host = '0.0.0.0';
 
 app.listen({
   port,
-  host
+  host,
 }).then(() => {
   console.log(`Server listening on ${host}:${port}`);
-}).catch((err) => {
+}).catch(err => {
   console.error(err);
   process.exit(1);
-})
+});

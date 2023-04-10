@@ -6,5 +6,5 @@ export default defineConfig({
   silent: true,
   clean: true,
   minify: true,
-  splitting: false
+  splitting: false,
 });
