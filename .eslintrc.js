@@ -3,7 +3,10 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: 'standard-with-typescript',
+  extends: [
+    'standard-with-typescript',
+    'prettier',
+  ],
   overrides: [
   ],
   parserOptions: {
@@ -19,5 +22,7 @@ module.exports = {
     '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
     '@typescript-eslint/space-before-function-paren': ['error', 'never'],
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/consistent-type-definitions': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
   },
 };
