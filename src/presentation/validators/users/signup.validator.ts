@@ -1,31 +1,43 @@
-import { type BaseError } from '@/common/errors/base.error';
 import { type SignupController } from '@/presentation/controllers/users/signup/signup.controller';
-import { MissingParamError } from '@/presentation/errors/missing-param.error';
-import { WeakPasswordError } from '@/presentation/errors/weak-password.error';
 import { type IValidator } from '@/presentation/interfaces/validator.interface';
+import { z } from 'zod';
+import { BaseValidator } from '../base.validator';
+import { ValidationError } from '@/presentation/errors/validation.error';
 
-export class SignupValidator implements IValidator<SignupController.Params> {
-  validate(params: SignupController.Params): BaseError | null {
-    const { name, email, password } = params;
+const hasUppercaseRegex = /[A-Z]/;
+const hasLowercaseRegex = /[a-z]/;
+const hasNumberRegex = /[0-9]/;
+const hasSpecialCharacterRegex = /[^a-zA-Z0-9]/;
 
-    if (!name) {
-      return new MissingParamError('name');
-    }
+const signupParamsSchema = z.object({
+  name: z.string({ required_error: 'is required' }),
+  email: z
+    .string({
+      required_error: 'is required',
+    })
+    .email('must be a valid email address'),
+  password: z
+    .string()
+    .min(8, 'must be at least 8 characters')
+    .regex(hasUppercaseRegex, 'must contain at least one uppercase letter')
+    .regex(hasLowercaseRegex, 'must contain at least one lowercase letter')
+    .regex(hasNumberRegex, 'must contain at least one number')
+    .regex(
+      hasSpecialCharacterRegex,
+      'must contain at least one special character',
+    ),
+});
 
-    if (!email) {
-      return new MissingParamError('email');
-    }
+export class SignupValidator
+  extends BaseValidator
+  implements IValidator<SignupController.Params>
+{
+  validate(params: SignupController.Params): ValidationError | null {
+    const result = signupParamsSchema.safeParse(params);
 
-    if (!password) {
-      return new MissingParamError('password');
-    }
-
-    // Password must have at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character
-    const strongPasswordRegex =
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/;
-
-    if (!strongPasswordRegex.test(password)) {
-      return new WeakPasswordError();
+    if (!result.success) {
+      const errors = this.buildErrorMessages(result.error.issues);
+      return new ValidationError(errors);
     }
 
     return null;

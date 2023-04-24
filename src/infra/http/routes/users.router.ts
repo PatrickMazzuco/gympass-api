@@ -22,7 +22,7 @@ const setupRoutes = (app: FastifyInstance): void => {
       SignupControllerAdapter.adapt(request),
     );
 
-    return await HTTPResponseAdapter.adapt({
+    await HTTPResponseAdapter.adapt({
       controllerResponse: response,
       reply,
       statusCode: HttpStatusCode.CREATED,

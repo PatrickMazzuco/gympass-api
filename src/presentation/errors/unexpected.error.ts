@@ -1,12 +1,10 @@
-import { BaseError } from '@/common/errors/base.error';
-import { ErrorToken } from '@/common/enums/errors/error-name.enum';
 import { ErrorType } from '@/common/enums/errors/error-type.enum';
+import { InternalError } from '@/common/errors/internal.error';
 
-export class UnexpectedError extends BaseError {
+export class UnexpectedError extends InternalError {
   constructor() {
-    super(`Unexpected error.`);
+    super(`Unexpected error`);
     this.name = this.constructor.name;
-    this.token = ErrorToken.UNEXPECTED;
     this.type = ErrorType.UNEXPECTED_ERROR;
   }
 }

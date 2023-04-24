@@ -1,23 +1,14 @@
-import { ErrorToken } from '../enums/errors/error-name.enum';
 import { ErrorType } from '../enums/errors/error-type.enum';
 
 export class BaseError extends Error {
-  private _token: ErrorToken;
   private _type: ErrorType;
+  private _content: any[] | null;
 
   constructor(message: string) {
     super(message);
     this.name = this.constructor.name;
-    this._token = ErrorToken.DEFAULT;
     this._type = ErrorType.UNEXPECTED_ERROR;
-  }
-
-  get token(): ErrorToken {
-    return this._token;
-  }
-
-  set token(value: ErrorToken) {
-    this._token = value;
+    this._content = null;
   }
 
   get type(): ErrorType {
@@ -26,5 +17,13 @@ export class BaseError extends Error {
 
   set type(value: ErrorType) {
     this._type = value;
+  }
+
+  get content(): any[] | null {
+    return this._content ? this._content : null;
+  }
+
+  set content(value: any[] | null) {
+    this._content = value;
   }
 }

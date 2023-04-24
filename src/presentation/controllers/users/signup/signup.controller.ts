@@ -4,13 +4,13 @@ import { type IController } from '@/presentation/interfaces/controller.interface
 import { type IValidator } from '@/presentation/interfaces/validator.interface';
 import { type ResultOrError } from '@/presentation/types/result-or-error.type';
 
-type SignupControllerInput = {
+type SignupControllerParams = {
   name: string;
   email: string;
   password: string;
 };
 
-type SignupControllerOutput = {
+type SignupControllerResult = {
   id: string;
 };
 
@@ -20,20 +20,20 @@ type SignupControllerConstructor = {
 };
 
 export namespace SignupController {
-  export type Params = SignupControllerInput;
-  export type Result = SignupControllerOutput;
+  export type Params = SignupControllerParams;
+  export type Result = SignupControllerResult;
   export type Config = SignupControllerConstructor;
 }
 
 export class SignupController
   implements IController<SignupController.Params, SignupController.Result>
 {
-  private readonly signup: ISignup;
+  private readonly signupUsecase: ISignup;
   private readonly validator: IValidator<SignupController.Params>;
 
-  constructor(config: SignupController.Config) {
-    this.signup = config.signup;
-    this.validator = config.validator;
+  constructor({ signup, validator }: SignupController.Config) {
+    this.signupUsecase = signup;
+    this.validator = validator;
   }
 
   async handle(
@@ -42,15 +42,15 @@ export class SignupController
     try {
       const error = this.validator.validate(params);
 
-      if (error) {
-        return {
-          error,
-        };
-      }
+      if (error) return { error };
 
       const { name, email, password } = params;
 
-      const result = await this.signup.execute({ name, email, password });
+      const result = await this.signupUsecase.execute({
+        name,
+        email,
+        password,
+      });
 
       return result;
     } catch (error) {
