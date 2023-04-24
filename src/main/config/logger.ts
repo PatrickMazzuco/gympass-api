@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import pino from 'pino';
-import { env } from '@/config/env';
+import { env } from '@/main/config/env';
 
 const isDev = env.NODE_ENV === 'development';
 

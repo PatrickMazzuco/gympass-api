@@ -1,6 +1,7 @@
-import { app } from './app';
-import { env } from '@/config/env';
-import Logger from './lib/logger';
+import { env } from '@/main/config/env';
+import Logger from './config/logger';
+import { app } from '@/infra/http/app';
+import '@/infra/http/routes';
 
 const { PORT: port, HOST: host } = env;
 

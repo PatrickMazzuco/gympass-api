@@ -16,9 +16,11 @@ module.exports = {
     '@typescript-eslint/semi': ['error', 'always'],
     'comma-dangle': 'off',
     '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
-    '@typescript-eslint/space-before-function-paren': ['error', 'never'],
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/no-namespace': 'off',
+    'import/export': 'off',
+    '@typescript-eslint/no-extraneous-class': 'off',
   },
 };
