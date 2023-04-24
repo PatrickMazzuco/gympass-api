@@ -1,45 +1,32 @@
 import { type FastifyInstance } from 'fastify';
-import { RegisterControllerAdapter } from '../adapters/register-controller.adapter';
-import { makeRegisterController } from '@/main/factories/controllers/register/register-controller.factory';
+import { SignupControllerAdapter } from '../adapters/users/signup-controller.adapter';
+import { makeSignupController } from '@/main/factories/controllers/signup/signup-controller.factory';
 import { HttpStatusCode } from '../enums/http-status-code.enum';
-import { ErrorType } from '@/presentation/errors/error-type.enum';
+import { HTTPResponseAdapter } from '../adapters/http-response.adapter';
 
-export type RegisterRequestBody = {
+export type SignupRequestBody = {
   name: string;
   email: string;
   password: string;
 };
 
-export type RegisterRequest = {
-  body: RegisterRequestBody;
+export type SignupRequest = {
+  body: SignupRequestBody;
 };
 
 const setupRoutes = (app: FastifyInstance): void => {
-  app.post<{ Body: RegisterRequestBody }>('/users', async (request, reply) => {
-    const controller = makeRegisterController();
+  app.post<{ Body: SignupRequestBody }>('/users', async (request, reply) => {
+    const controller = makeSignupController();
 
     const response = await controller.handle(
-      RegisterControllerAdapter.adapt(request),
+      SignupControllerAdapter.adapt(request),
     );
 
-    if (response.error) {
-      let statusCode: HttpStatusCode;
-
-      switch (response.error.type) {
-        case ErrorType.INPUT_ERROR:
-          statusCode = HttpStatusCode.BAD_REQUEST;
-          break;
-        case ErrorType.UNEXPECTED_ERROR:
-          statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR;
-          break;
-        default:
-          statusCode = HttpStatusCode.INTERNAL_SERVER_ERROR;
-      }
-
-      return await reply.code(statusCode).send(response.error);
-    }
-
-    return await reply.code(HttpStatusCode.CREATED).send(response.data);
+    return await HTTPResponseAdapter.adapt({
+      controllerResponse: response,
+      reply,
+      statusCode: HttpStatusCode.CREATED,
+    });
   });
 };
 

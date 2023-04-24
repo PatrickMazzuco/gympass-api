@@ -1,5 +1,5 @@
-import { ErrorToken } from './error-name.enum';
-import { ErrorType } from './error-type.enum';
+import { ErrorToken } from '../enums/errors/error-name.enum';
+import { ErrorType } from '../enums/errors/error-type.enum';
 
 export class BaseError extends Error {
   private _token: ErrorToken;

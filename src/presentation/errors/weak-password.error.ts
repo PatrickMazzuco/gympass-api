@@ -1,6 +1,6 @@
-import { BaseError } from './base.error';
-import { ErrorToken } from './error-name.enum';
-import { ErrorType } from './error-type.enum';
+import { ErrorToken } from '@/common/enums/errors/error-name.enum';
+import { ErrorType } from '@/common/enums/errors/error-type.enum';
+import { BaseError } from '@/common/errors/base.error';
 
 export class WeakPasswordError extends BaseError {
   constructor() {

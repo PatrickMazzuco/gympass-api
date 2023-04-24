@@ -1,13 +1,11 @@
-import { type RegisterController } from '@/presentation/controllers/users/register/register.controller';
-import { type BaseError } from '@/presentation/errors/base.error';
+import { type BaseError } from '@/common/errors/base.error';
+import { type SignupController } from '@/presentation/controllers/users/signup/signup.controller';
 import { MissingParamError } from '@/presentation/errors/missing-param.error';
 import { WeakPasswordError } from '@/presentation/errors/weak-password.error';
 import { type IValidator } from '@/presentation/interfaces/validator.interface';
 
-export class RegisterValidator
-  implements IValidator<RegisterController.Params>
-{
-  validate(params: RegisterController.Params): BaseError | null {
+export class SignupValidator implements IValidator<SignupController.Params> {
+  validate(params: SignupController.Params): BaseError | null {
     const { name, email, password } = params;
 
     if (!name) {

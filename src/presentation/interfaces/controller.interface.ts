@@ -1,5 +1,5 @@
-import { type ResponseOrError } from '../types/response-or-error.type';
+import { type ResultOrError } from '../types/result-or-error.type';
 
 export interface IController<TParams, TResult> {
-  handle: (params: TParams) => Promise<ResponseOrError<TResult>>;
+  handle: (params: TParams) => Promise<ResultOrError<TResult>>;
 }
