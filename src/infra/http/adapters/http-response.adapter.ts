@@ -1,4 +1,3 @@
-import { type ResultOrError } from '@/presentation/types/result-or-error.type';
 import { type FastifyReply } from 'fastify';
 import { HttpStatusCode } from '../enums/http-status-code.enum';
 import { ErrorType } from '@/common/enums/errors/error-type.enum';

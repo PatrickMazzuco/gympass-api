@@ -1,6 +1,6 @@
 import { type z } from 'zod';
 
-type ErrorMessage = {
+export type ErrorMessage = {
   field: string;
   errors: string[];
 };

@@ -2,7 +2,6 @@ import { type ISignup } from '@/application/interfaces/users/signup.interface';
 import { UnexpectedError } from '@/presentation/errors/unexpected.error';
 import { type IController } from '@/presentation/interfaces/controller.interface';
 import { type IValidator } from '@/presentation/interfaces/validator.interface';
-import { type ResultOrError } from '@/presentation/types/result-or-error.type';
 
 type SignupControllerParams = {
   name: string;
@@ -15,7 +14,7 @@ type SignupControllerResult = {
 };
 
 type SignupControllerConstructor = {
-  signup: ISignup;
+  signupUsecase: ISignup;
   validator: IValidator<SignupController.Params>;
 };
 
@@ -31,8 +30,8 @@ export class SignupController
   private readonly signupUsecase: ISignup;
   private readonly validator: IValidator<SignupController.Params>;
 
-  constructor({ signup, validator }: SignupController.Config) {
-    this.signupUsecase = signup;
+  constructor({ signupUsecase, validator }: SignupController.Config) {
+    this.signupUsecase = signupUsecase;
     this.validator = validator;
   }
 

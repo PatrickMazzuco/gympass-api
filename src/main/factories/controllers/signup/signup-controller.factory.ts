@@ -16,7 +16,7 @@ export const makeSignupController = (): SignupController => {
   const signupValidator = new SignupValidator();
 
   const controller = new SignupController({
-    signup: signupUsecase,
+    signupUsecase,
     validator: signupValidator,
   });
 

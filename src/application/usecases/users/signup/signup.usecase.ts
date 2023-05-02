@@ -3,7 +3,6 @@ import { type IHasher } from '@/application/interfaces/cryptography/hasher.inter
 import { type ICreateUserRepository } from '@/application/interfaces/db/users/create-user.repository.interface';
 import { type IEmailExistsRepository } from '@/application/interfaces/db/users/email-exists.repository.interface';
 import { type ISignup } from '@/application/interfaces/users/signup.interface';
-import { type ResultOrError } from '@/presentation/types/result-or-error.type';
 
 type SignupUsecaseConstructor = {
   passwordHasher: IHasher;

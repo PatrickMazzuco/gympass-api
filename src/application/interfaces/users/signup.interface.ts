@@ -1,5 +1,3 @@
-import { type ResultOrError } from '@/presentation/types/result-or-error.type';
-
 type ISignupParams = {
   name: string;
   email: string;
