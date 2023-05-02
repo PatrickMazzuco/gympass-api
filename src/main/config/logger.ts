@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import pino from 'pino';
-import { env } from '@/main/config/env';
+import { Environment, env } from '@/main/config/env';
 
-const isDev = env.NODE_ENV === 'development';
+const isDev =
+  env.NODE_ENV === Environment.DEVELOPMENT || env.NODE_ENV === Environment.TEST;
 
 let defaultOptions: pino.LoggerOptions = {};
 

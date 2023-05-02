@@ -15,7 +15,7 @@ export async function errorHandlerMiddleware(
   reply: FastifyReply,
 ): Promise<void> {
   if (env.NODE_ENV !== Environment.PRODUCTION) {
-    Logger.error(error);
+    Logger.error(error.message);
   }
 
   if (error instanceof HTTPError) {
@@ -26,6 +26,10 @@ export async function errorHandlerMiddleware(
 
     await reply.code(error.statusCode).send(body);
     return;
+  }
+
+  if (env.NODE_ENV !== Environment.PRODUCTION) {
+    Logger.error(error.message);
   }
 
   if (error.statusCode) {

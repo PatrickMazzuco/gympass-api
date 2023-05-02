@@ -6,11 +6,15 @@ export default defineConfig({
   test: {
     globals: true,
     clearMocks: true,
+    passWithNoTests: true,
+    threads: false,
     coverage: {
       exclude: [
         ...configDefaults.exclude,
         'src/tests/**/*',
         'src/**/*.error.ts',
+        'src/main/config/**/*',
+        'src/infra/db/prisma/tests/**/*',
       ],
     },
   },

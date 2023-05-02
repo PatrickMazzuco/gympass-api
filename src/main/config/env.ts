@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import { config } from 'dotenv';
 import { z } from 'zod';
 
 export enum Environment {
@@ -6,6 +6,10 @@ export enum Environment {
   PRODUCTION = 'production',
   TEST = 'test',
 }
+
+config({
+  path: `env/.env.${process.env.NODE_ENV ?? Environment.DEVELOPMENT}`,
+});
 
 const envSchema = z.object({
   NODE_ENV: z.nativeEnum(Environment).default(Environment.DEVELOPMENT),

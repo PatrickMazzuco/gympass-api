@@ -15,6 +15,7 @@ app
   })
   .then(() => {
     Logger.info(`Server listening on ${host}:${port}`);
+    Logger.info(`Environment: ${env.NODE_ENV}`);
   })
   .catch((err) => {
     Logger.error(err);
