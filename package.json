@@ -9,12 +9,15 @@
     "start:dev": "tsx watch src/main/server.ts",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcrypt": "5.0.0",
+    "@types/jest": "29.5.1",
     "@types/node": "18.15.11",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "eslint": "8.38.0",
@@ -23,9 +26,11 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
+    "jest": "29.5.0",
     "pino-pretty": "10.0.0",
     "prettier": "2.8.7",
     "prisma": "4.12.0",
+    "ts-jest": "29.1.0",
     "tsconfig-paths": "4.2.0",
     "tsup": "6.7.0",
     "tsx": "3.12.6",
@@ -33,6 +38,7 @@
   },
   "dependencies": {
     "@prisma/client": "4.12.0",
+    "bcrypt": "5.1.0",
     "dotenv": "16.0.3",
     "fastify": "4.15.0",
     "pino": "8.11.0",
