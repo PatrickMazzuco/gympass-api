@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
@@ -6,5 +6,12 @@ export default defineConfig({
   test: {
     globals: true,
     clearMocks: true,
+    coverage: {
+      exclude: [
+        ...configDefaults.exclude,
+        'src/tests/**/*',
+        'src/**/*.error.ts',
+      ],
+    },
   },
 });
