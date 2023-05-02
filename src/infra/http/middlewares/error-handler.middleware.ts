@@ -1,3 +1,7 @@
+import { type HTTPResponseError } from '@/infra/http/adapters/http-response.adapter';
+import { HttpStatusCode } from '@/infra/http/enums/http-status-code.enum';
+import { HTTPError } from '@/infra/http/errors/http.error';
+import { Environment, env } from '@/main/config/env';
 import Logger from '@/main/config/logger';
 import {
   type FastifyError,
@@ -10,7 +14,19 @@ export async function errorHandlerMiddleware(
   _request: FastifyRequest,
   reply: FastifyReply,
 ): Promise<void> {
-  Logger.error(error);
+  if (env.NODE_ENV !== Environment.PRODUCTION) {
+    Logger.error(error);
+  }
+
+  if (error instanceof HTTPError) {
+    const body: Omit<HTTPResponseError, 'statusCode'> = {
+      message: error.message,
+      validationErrors: error.validationErrors,
+    };
+
+    await reply.code(error.statusCode).send(body);
+    return;
+  }
 
   if (error.statusCode) {
     await reply.code(error.statusCode).send({
@@ -19,7 +35,7 @@ export async function errorHandlerMiddleware(
     return;
   }
 
-  await reply.code(500).send({
+  await reply.code(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
     message: 'Internal server error',
   });
 }

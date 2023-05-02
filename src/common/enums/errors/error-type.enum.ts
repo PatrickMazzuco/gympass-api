@@ -3,4 +3,5 @@ export enum ErrorType {
   UNEXPECTED_ERROR = 'UnexpectedError',
   UNAUTHORIZED_ERROR = 'UnauthorizedError',
   FORBIDDEN_ERROR = 'ForbiddenError',
+  DUPLICATED_RESOURCE_ERROR = 'DuplicatedResourceError',
 }
