@@ -1,15 +1,23 @@
 import bcrypt from 'bcrypt';
-
 import { BcryptAdapter } from './bcrypt-adapter.service';
+import { describe, it, expect } from 'vitest';
 
-jest.mock('bcrypt', () => ({
-  async genSalt(): Promise<string> {
+vi.mock('bcrypt', () => {
+  const genSalt = async (): Promise<string> => {
     return 'any_salt';
-  },
-  async hash(): Promise<string> {
+  };
+
+  const hash = async (): Promise<string> => {
     return 'any_hash';
-  },
-}));
+  };
+
+  return {
+    default: {
+      genSalt,
+      hash,
+    },
+  };
+});
 
 type MockValues = {
   original: string;
@@ -30,8 +38,8 @@ describe('Bcrypt Adapter', () => {
     const sut = makeSut();
     const valueToHash = mockValues().original;
 
-    const bcryptGenSaltSpy = jest.spyOn(bcrypt, 'genSalt');
-    const bcryptHashSpy = jest.spyOn(bcrypt, 'hash');
+    const bcryptGenSaltSpy = vi.spyOn(bcrypt, 'genSalt');
+    const bcryptHashSpy = vi.spyOn(bcrypt, 'hash');
 
     await sut.hash(valueToHash);
 
@@ -43,7 +51,7 @@ describe('Bcrypt Adapter', () => {
     const sut = makeSut();
     const valueToHash = mockValues().original;
 
-    jest.spyOn(bcrypt, 'hash').mockImplementationOnce(() => {
+    vi.spyOn(bcrypt, 'hash').mockImplementationOnce(() => {
       throw new Error();
     });
 

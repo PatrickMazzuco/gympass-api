@@ -12,6 +12,7 @@
     "sourceMap": true,
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["vitest/globals"]
   }
 }

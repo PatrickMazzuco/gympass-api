@@ -14,11 +14,11 @@ export type SignupRequest = {
   body: SignupRequestBody;
 };
 
+const signupController = makeSignupController();
+
 const setupRoutes = (app: FastifyInstance): void => {
   app.post<{ Body: SignupRequestBody }>('/users', async (request, reply) => {
-    const controller = makeSignupController();
-
-    const response = await controller.handle(
+    const response = await signupController.handle(
       SignupControllerAdapter.adapt(request),
     );
 

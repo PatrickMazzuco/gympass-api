@@ -1,9 +1,14 @@
+import { UserAlreadyExistsError } from '@/application/errors/user-already-exists.error';
 import { type IHasher } from '@/application/interfaces/cryptography/hasher.interface';
+import { type ICreateUserRepository } from '@/application/interfaces/db/users/create-user.repository.interface';
+import { type IEmailExistsRepository } from '@/application/interfaces/db/users/email-exists.repository.interface';
 import { type ISignup } from '@/application/interfaces/users/signup.interface';
 import { type ResultOrError } from '@/presentation/types/result-or-error.type';
 
 type SignupUsecaseConstructor = {
   passwordHasher: IHasher;
+  createUserRepository: ICreateUserRepository;
+  emailExistsRepository: IEmailExistsRepository;
 };
 
 export namespace SignupUsecase {
@@ -11,27 +16,41 @@ export namespace SignupUsecase {
 }
 export class SignupUsecase implements ISignup {
   private readonly passwordHasher: IHasher;
+  private readonly createUserRepository: ICreateUserRepository;
+  private readonly emailExistsRepository: IEmailExistsRepository;
+
   constructor(config: SignupUsecase.Config) {
     this.passwordHasher = config.passwordHasher;
+    this.createUserRepository = config.createUserRepository;
+    this.emailExistsRepository = config.emailExistsRepository;
   }
 
-  async execute(
-    params: ISignup.Params,
-  ): Promise<ResultOrError<ISignup.Result>> {
-    const { name, email, password } = params;
+  async execute({
+    name,
+    email,
+    password,
+  }: ISignup.Params): Promise<ResultOrError<ISignup.Result>> {
+    const emailAlreadyExists = await this.emailExistsRepository.emailExists(
+      email,
+    );
+
+    if (emailAlreadyExists) {
+      return {
+        error: new UserAlreadyExistsError(),
+      };
+    }
 
     const hashedPassword = await this.passwordHasher.hash(password);
 
-    console.log({
+    const { id } = await this.createUserRepository.create({
       name,
       email,
-      password,
-      hashedPassword,
+      password: hashedPassword,
     });
 
     return {
       data: {
-        id: '123',
+        id,
       },
     };
   }
