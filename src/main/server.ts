@@ -2,8 +2,11 @@ import { env } from '@/main/config/env';
 import Logger from './config/logger';
 import { app } from '@/infra/http/app';
 import '@/infra/http/routes';
+import { errorHandlerMiddleware } from '@/infra/http/middlewares/error-handler.middleware';
 
 const { PORT: port, HOST: host } = env;
+
+app.setErrorHandler(errorHandlerMiddleware);
 
 app
   .listen({
