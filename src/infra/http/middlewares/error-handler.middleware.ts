@@ -32,13 +32,6 @@ export async function errorHandlerMiddleware(
     Logger.error(error.message);
   }
 
-  if (error.statusCode) {
-    await reply.code(error.statusCode).send({
-      message: error.message,
-    });
-    return;
-  }
-
   await reply.code(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
     message: 'Internal server error',
   });

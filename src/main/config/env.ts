@@ -15,6 +15,7 @@ const envSchema = z.object({
   NODE_ENV: z.nativeEnum(Environment).default(Environment.DEVELOPMENT),
   PORT: z.coerce.number().default(3000),
   HOST: z.string().default('0.0.0.0'),
+  API_PREFIX: z.string().default('/api/v1'),
 });
 
 const _env = envSchema.safeParse(process.env);

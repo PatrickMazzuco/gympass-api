@@ -1,4 +1,4 @@
-import { type FastifyInstance } from 'fastify';
+import { type FastifyInstance, type FastifyPluginAsync } from 'fastify';
 import { SignupControllerAdapter } from '../adapters/users/signup-controller.adapter';
 import { makeSignupController } from '@/main/factories/controllers/signup/signup-controller.factory';
 import { HttpStatusCode } from '../enums/http-status-code.enum';
@@ -16,8 +16,8 @@ export type SignupRequest = {
 
 const signupController = makeSignupController();
 
-const setupRoutes = (app: FastifyInstance): void => {
-  app.post<{ Body: SignupRequestBody }>('/users', async (request, reply) => {
+const setupRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
+  app.post<{ Body: SignupRequestBody }>(`/users`, async (request, reply) => {
     const response = await signupController.handle(
       SignupControllerAdapter.adapt(request),
     );

@@ -4,6 +4,7 @@ import { ErrorType } from '@/common/enums/errors/error-type.enum';
 import { type BaseError } from '@/common/errors/base.error';
 import Logger from '@/main/config/logger';
 import { HTTPError } from '@/infra/http/errors/http.error';
+import { type ErrorMessage } from '@/presentation/validators/base.validator';
 
 type HTTPAdapterOptions = {
   controllerResponse: ResultOrError<any>;
@@ -14,7 +15,7 @@ type HTTPAdapterOptions = {
 export type HTTPResponseError = {
   statusCode: HttpStatusCode;
   message: string;
-  validationErrors?: Record<string, string[]>;
+  validationErrors?: ErrorMessage[];
 };
 export class HTTPResponseAdapter {
   static async adapt({
