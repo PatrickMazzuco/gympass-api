@@ -4,4 +4,5 @@ export enum ErrorType {
   UNAUTHORIZED_ERROR = 'UnauthorizedError',
   FORBIDDEN_ERROR = 'ForbiddenError',
   DUPLICATED_RESOURCE_ERROR = 'DuplicatedResourceError',
+  NOT_FOUND_ERROR = 'NotFoundError',
 }

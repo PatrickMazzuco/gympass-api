@@ -9,4 +9,20 @@ export namespace UsersError {
       this.type = ErrorType.DUPLICATED_RESOURCE_ERROR;
     }
   }
+
+  export class NotFound extends ClientError {
+    constructor() {
+      super('User not found');
+      this.name = this.constructor.name;
+      this.type = ErrorType.NOT_FOUND_ERROR;
+    }
+  }
+
+  export class InvalidCredentials extends ClientError {
+    constructor() {
+      super('Invalid credentials');
+      this.name = this.constructor.name;
+      this.type = ErrorType.UNAUTHORIZED_ERROR;
+    }
+  }
 }
