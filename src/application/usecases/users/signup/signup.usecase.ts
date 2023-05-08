@@ -1,4 +1,4 @@
-import { UserAlreadyExistsError } from '@/application/errors/user-already-exists.error';
+import { UsersError } from '@/application/errors/users.error';
 import { type IHasher } from '@/application/interfaces/cryptography/hasher.interface';
 import { type ICreateUserRepository } from '@/application/interfaces/db/users/create-user.repository.interface';
 import { type IEmailExistsRepository } from '@/application/interfaces/db/users/email-exists.repository.interface';
@@ -35,7 +35,7 @@ export class SignupUsecase implements ISignup {
 
     if (emailAlreadyExists) {
       return {
-        error: new UserAlreadyExistsError(),
+        error: new UsersError.AlreadyExists(),
       };
     }
 

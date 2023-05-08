@@ -5,6 +5,7 @@ import { type SignupRequestBody } from './users.router';
 import { clearPrismaDatabase } from '@/infra/db/prisma/tests/utils';
 import { HttpStatusCode } from '../enums/http-status-code.enum';
 import { mockSignupRequestBody } from '@/tests/mocks/modules/users/users-routes.mock';
+import { UsersError } from '@/application/errors/users.error';
 
 describe('User routes', () => {
   let app: FastifyInstance;
@@ -43,6 +44,9 @@ describe('User routes', () => {
       const response = await testHttpClient.post('/users', requestBody);
 
       expect(response.status).toBe(HttpStatusCode.CONFLICT);
+      expect(response.data.message).toBe(
+        new UsersError.AlreadyExists().message,
+      );
     });
 
     it('should return 400 if email is invalid', async () => {
@@ -52,6 +56,17 @@ describe('User routes', () => {
       const response = await testHttpClient.post('/users', requestBody);
 
       expect(response.status).toBe(HttpStatusCode.BAD_REQUEST);
+      expect(response.data).toEqual(
+        expect.objectContaining({
+          message: expect.any(String),
+          validationErrors: expect.any(Array),
+        }),
+      );
+      expect(response.data.validationErrors).toContainEqual(
+        expect.objectContaining({
+          field: 'email',
+        }),
+      );
     });
 
     it('should return 400 if password is invalid', async () => {
@@ -61,6 +76,17 @@ describe('User routes', () => {
       const response = await testHttpClient.post('/users', requestBody);
 
       expect(response.status).toBe(HttpStatusCode.BAD_REQUEST);
+      expect(response.data).toEqual(
+        expect.objectContaining({
+          message: expect.any(String),
+          validationErrors: expect.any(Array),
+        }),
+      );
+      expect(response.data.validationErrors).toContainEqual(
+        expect.objectContaining({
+          field: 'password',
+        }),
+      );
     });
   });
 });

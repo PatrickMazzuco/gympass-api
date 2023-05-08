@@ -3,12 +3,12 @@ import { type ICreateUserRepository } from '@/application/interfaces/db/users/cr
 import { type IEmailExistsRepository } from '@/application/interfaces/db/users/email-exists.repository.interface';
 import { type ISignup } from '@/application/interfaces/users/signup.interface';
 import { SignupUsecase } from './signup.usecase';
-import { UserAlreadyExistsError } from '@/application/errors/user-already-exists.error';
 import {
   mockCreateUserRepository,
   mockEmailExistsRepository,
 } from '@/tests/mocks/modules/users/users-repository.mock';
 import { mockHasher } from '@/tests/mocks/services/hash-service.mock';
+import { UsersError } from '@/application/errors/users.error';
 
 function mockValues(): ISignup.Params {
   return {
@@ -84,7 +84,7 @@ describe('Signup Usecase', () => {
 
     const result = await sut.execute(params);
 
-    expect(result.error).toEqual(new UserAlreadyExistsError());
+    expect(result.error).toEqual(new UsersError.AlreadyExists());
   });
 
   it('should call password hasher with correct value', async () => {
