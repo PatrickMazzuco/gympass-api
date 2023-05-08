@@ -11,10 +11,15 @@ vi.mock('bcrypt', () => {
     return 'any_hash';
   };
 
+  const compare = async (): Promise<boolean> => {
+    return true;
+  };
+
   return {
     default: {
       genSalt,
       hash,
+      compare,
     },
   };
 });
@@ -34,39 +39,79 @@ const makeSut = (): BcryptAdapter => {
 };
 
 describe('Bcrypt Adapter', () => {
-  it('should call bcrypt hash with correct value', async () => {
-    const sut = makeSut();
-    const valueToHash = mockValues().original;
+  describe('hash()', () => {
+    it('should call bcrypt hash with correct value', async () => {
+      const sut = makeSut();
+      const valueToHash = mockValues().original;
 
-    const bcryptGenSaltSpy = vi.spyOn(bcrypt, 'genSalt');
-    const bcryptHashSpy = vi.spyOn(bcrypt, 'hash');
+      const bcryptGenSaltSpy = vi.spyOn(bcrypt, 'genSalt');
+      const bcryptHashSpy = vi.spyOn(bcrypt, 'hash');
 
-    await sut.hash(valueToHash);
+      await sut.hash(valueToHash);
 
-    expect(bcryptGenSaltSpy).toBeCalledTimes(1);
-    expect(bcryptHashSpy).toBeCalledWith(valueToHash, 'any_salt');
-  });
-
-  it('should throw if bcrypt hash throws', async () => {
-    const sut = makeSut();
-    const valueToHash = mockValues().original;
-
-    vi.spyOn(bcrypt, 'hash').mockImplementationOnce(() => {
-      throw new Error();
+      expect(bcryptGenSaltSpy).toBeCalledTimes(1);
+      expect(bcryptHashSpy).toBeCalledWith(valueToHash, 'any_salt');
     });
 
-    const promise = sut.hash(valueToHash);
+    it('should throw if bcrypt hash throws', async () => {
+      const sut = makeSut();
+      const valueToHash = mockValues().original;
 
-    await expect(promise).rejects.toThrow();
+      vi.spyOn(bcrypt, 'hash').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      const promise = sut.hash(valueToHash);
+
+      await expect(promise).rejects.toThrow();
+    });
+
+    it('should return the hashed password on success', async () => {
+      const sut = makeSut();
+      const valueToHash = mockValues().original;
+
+      const hashedPassword = await sut.hash(valueToHash);
+
+      expect(hashedPassword).toEqual('any_hash');
+      expect(hashedPassword).not.toEqual(valueToHash);
+    });
   });
 
-  it('should return the hashed password on success', async () => {
-    const sut = makeSut();
-    const valueToHash = mockValues().original;
+  describe('compare()', () => {
+    it('should call bcrypt compare with correct values', async () => {
+      const sut = makeSut();
+      const { original, hashed } = mockValues();
 
-    const hashedPassword = await sut.hash(valueToHash);
+      const bcryptCompareSpy = vi.spyOn(bcrypt, 'compare');
 
-    expect(hashedPassword).toEqual('any_hash');
-    expect(hashedPassword).not.toEqual(valueToHash);
+      await sut.compare({ value: original, hashedValue: hashed });
+
+      expect(bcryptCompareSpy).toBeCalledWith(original, hashed);
+    });
+
+    it('should throw if bcrypt compare throws', async () => {
+      const sut = makeSut();
+      const { original, hashed } = mockValues();
+
+      vi.spyOn(bcrypt, 'compare').mockImplementationOnce(() => {
+        throw new Error();
+      });
+
+      const promise = sut.compare({ value: original, hashedValue: hashed });
+
+      await expect(promise).rejects.toThrow();
+    });
+
+    it('should return true if bcrypt compare returns true', async () => {
+      const sut = makeSut();
+      const { original, hashed } = mockValues();
+
+      const result = await sut.compare({
+        value: original,
+        hashedValue: hashed,
+      });
+
+      expect(result).toBeTruthy();
+    });
   });
 });
