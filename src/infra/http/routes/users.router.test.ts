@@ -90,13 +90,13 @@ describe('User routes', () => {
     });
   });
 
-  describe('POST /users/auth', async () => {
+  describe('POST /sessions', async () => {
     it('should return 200 on success', async () => {
       const requestBody: SignupRequestBody = mockSignupRequestBody();
 
       await testHttpClient.post('/users', requestBody);
 
-      const response = await testHttpClient.post('/users/auth', {
+      const response = await testHttpClient.post('/sessions', {
         email: requestBody.email,
         password: requestBody.password,
       });
@@ -111,7 +111,7 @@ describe('User routes', () => {
 
     it('should return 401 if email is invalid', async () => {
       const requestBody: SignupRequestBody = mockSignupRequestBody();
-      const response = await testHttpClient.post('/users/auth', {
+      const response = await testHttpClient.post('/sessions', {
         email: requestBody.email,
         password: 'invalid-password',
       });
@@ -127,7 +127,7 @@ describe('User routes', () => {
 
       await testHttpClient.post('/users', requestBody);
 
-      const response = await testHttpClient.post('/users/auth', {
+      const response = await testHttpClient.post('/sessions', {
         email: 'invalid-email@test.com',
         password: requestBody.password,
       });

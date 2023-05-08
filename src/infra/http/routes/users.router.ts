@@ -42,7 +42,7 @@ const setupRoutes: FastifyPluginAsync = async (app: FastifyInstance) => {
   });
 
   app.post<{ Body: AuthenticateRequestBody }>(
-    '/users/auth',
+    '/sessions',
     async (request, reply) => {
       const response = await authenticateController.handle(
         AuthenticateControllerAdapter.adapt(request),

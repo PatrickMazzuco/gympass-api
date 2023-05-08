@@ -46,7 +46,7 @@ export class AuthenticateUsecase implements IAuthenticate {
 
     return {
       data: {
-        id: 'any_id',
+        id: user.id,
       },
     };
   }
