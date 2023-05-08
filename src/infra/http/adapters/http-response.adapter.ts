@@ -50,6 +50,9 @@ function getErrorStatusCode(error: BaseError): HttpStatusCode {
     case ErrorType.DUPLICATED_RESOURCE_ERROR:
       statusCode = HttpStatusCode.CONFLICT;
       break;
+    case ErrorType.UNAUTHORIZED_ERROR:
+      statusCode = HttpStatusCode.UNAUTHORIZED;
+      break;
     default:
       Logger.warn(
         `Error type ${error.type} not found. From error: ${error.message}`,

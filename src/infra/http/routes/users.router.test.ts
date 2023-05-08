@@ -89,4 +89,53 @@ describe('User routes', () => {
       );
     });
   });
+
+  describe('POST /users/auth', async () => {
+    it('should return 200 on success', async () => {
+      const requestBody: SignupRequestBody = mockSignupRequestBody();
+
+      await testHttpClient.post('/users', requestBody);
+
+      const response = await testHttpClient.post('/users/auth', {
+        email: requestBody.email,
+        password: requestBody.password,
+      });
+
+      expect(response.status).toBe(HttpStatusCode.OK);
+      expect(response.data).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+        }),
+      );
+    });
+
+    it('should return 401 if email is invalid', async () => {
+      const requestBody: SignupRequestBody = mockSignupRequestBody();
+      const response = await testHttpClient.post('/users/auth', {
+        email: requestBody.email,
+        password: 'invalid-password',
+      });
+
+      expect(response.status).toBe(HttpStatusCode.UNAUTHORIZED);
+      expect(response.data.message).toBe(
+        new UsersError.InvalidCredentials().message,
+      );
+    });
+
+    it('should return 401 if password is invalid', async () => {
+      const requestBody: SignupRequestBody = mockSignupRequestBody();
+
+      await testHttpClient.post('/users', requestBody);
+
+      const response = await testHttpClient.post('/users/auth', {
+        email: 'invalid-email@test.com',
+        password: requestBody.password,
+      });
+
+      expect(response.status).toBe(HttpStatusCode.UNAUTHORIZED);
+      expect(response.data.message).toBe(
+        new UsersError.InvalidCredentials().message,
+      );
+    });
+  });
 });
